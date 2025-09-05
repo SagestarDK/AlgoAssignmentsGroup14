@@ -1,75 +1,172 @@
 #include <iostream>
-#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <array>
 #include <stdio.h>
 using namespace std;
 
-// ----- Book -----
+// --- Book type ---
 struct Book {
     int id;
-    int category;
-    bool borrowed;
-    Book(int id, int category) : id(id), category(category), borrowed(false) {}
+    int category;           // [0..15]
+    bool isBorrowed = false;
+    
+    // Constructor
+    Book(int i, int c) : id(i), category(c), isBorrowed(false) {}
 };
 
-// ----- Library -----
+// --- Library class ---
 class Library {
 private:
-    vector<Book> books;          // the only container
-    int findIndexById(int id) const;  // returns index or -1
+    // --- Data members ---
+    unordered_map<int, Book> booksById; // id -> Book
+    unordered_set<int> borrowedIds;     // borrowed ids
+    array<int,16> countPerCat{};        // books per category
+    int totalBooks = 0;
+    int validCats  = 0;
 
-public:
-    bool addBook(int id, int category);
-    bool borrowBook(int id);
-    bool returnBook(int id);
-    void displayAvailableBooks() const;
-    void displayBorrowedBooks() const;
-    int  countBooksInCategory(int category) const;
-};
+    // --- Helpers ---
+    double avgPerValidCat() const {
+        // TODO: return average = totalBooks / validCats
+        if (validCats == 0){
+            cout << "No books in shelfes, so no valid categories. \n";
+            return 0;
+        }
+        return totalBooks/validCats;
+    }
 
-// ----- Skeleton definitions (TODO: implement logic) -----
-int Library::findIndexById(int id) const {
-    // TODO: linear scan over 'books'; return index if books[i].id==id, else -1
-     for (size_t i = 0; i < books.size(); ++i) {
-        if (books[i].id == id) {
-            return static_cast<int>(i);
+    void incCategory(int c) {
+        // TODO: update countPerCat & validCats
+        //If box is empty, increment valid category by 1 (So box is now valid).
+        if (countPerCat[c] == 0){
+            validCats++;
+        }
+        //Add book to box
+        countPerCat[c]++;
+    }
+
+    void warnIfUnbalanced(int category) {
+        // TODO: check balance condition and print warning
+        if (2 * avgPerValidCat() >= countBooksInCategory(category)){
+            cout<<"Warning, too many books on one shelf, so unbalanced library detected!. \n";
         }
     }
-    return -1; // not found
-}
 
-bool Library::addBook(int id, int category) {
-    // TODO: if id not present (findIndexById==-1) -> books.push_back({id,category}); return true
-    // else return false
+    Book* findBook(int id) {
+        auto it = booksById.find(id);
+        if (it == booksById.end()) {
+            return nullptr;
+        }
+        return &it->second;  // return pointer to the Book
+    }
+
+
+
+public:
+    void addBook(int id, int category) {
+        // Validate category logic
+        if (category < 0 || category > 15) {
+            cout<<"Invalid category, please select a category between 0 and 15. \n";
+            return;
+        }
+            
+        if (booksById.find(id) == booksById.end()){
+            cout<<"Book is not found, inserting book. \n";
+            Book b{ id, category};    //Create book object
+            booksById.insert({id,b}); //Add book to the map with all unique books.
+            incCategory(category); //Update how many books we have in library shelves and valid categories if not initialised.
+            warnIfUnbalanced(category); //Make sure the library is balanced. 
+        } 
+        else {
+            cout<<"The book is already in the library. \n";
+        }
+    }
+
+    bool borrowBook(int id) {
+
+        Book *b = findBook(id);  // Iterator to the book object
+
+        if (!b) {
+            cout << "Book is not available. \n";
+            return false; 
+        } 
+
+
+        if (b->isBorrowed) {                           // If book is already borrowed, return false 
+            cout << "Book is already borrowed. \n";
+            return false; 
+        } 
+        
+        else {
+            b->isBorrowed = true;            // Flip the borrowed flag            
+            borrowedIds.insert(id);         // Remember it's borrowed
+            cout << "Book: "<< id<< " is now borrowed. \n";   // Print to terminal
+            return true;
+        }
     return false;
-}
+    }
 
-bool Library::borrowBook(int id) {
-    // TODO: if found and not borrowed -> set borrowed=true; return true; else false
-    return false;
-}
+    bool returnBook(int id) {
+        // TODO: check exists & is borrowed
+        // TODO: mark as available & update borrowedIds
+        Book *b = findBook(id);  // Iterator to the book object
 
-bool Library::returnBook(int id) {
-    // TODO: if found and borrowed -> set borrowed=false; return true; else false
-    return false;
-}
+        if (!b) {
+            cout << "Book is not available. \n";
+            return false; 
+        } 
 
-void Library::displayAvailableBooks() const {
-    // TODO: iterate 'books' and print those with borrowed==false
-}
+        if (b->isBorrowed) {                           // If book is borrowed, return it 
+            cout << "Book was succesfully return, have a nice day. \n";
+            b->isBorrowed = false;            // Flip the borrowed flag to false    
 
-void Library::displayBorrowedBooks() const {
-    // TODO: iterate 'books' and print those with borrowed==true
-}
+            return false; 
+        } 
+        return false;
+    }
 
-int Library::countBooksInCategory(int category) const {
-    // TODO: iterate 'books' and count where b.category==category; return count
-    return 0;
-}
+   
+    // --- Displays ---
+    void displayAllBooks() const {
+        // TODO: iterate over booksById and print all
+        cout << "All books: " << endl;
+        for (auto i = booksById.begin(); i != booksById.end(); i++)
+            cout << "Key: "<< i->first << "       " << "id: "<< i->second.id << " Category: "<< i->second.category << " Borrow status:" << i->second.isBorrowed << "\n"<<endl;
 
+        }
 
+    void displayAvailableBooks() const {
+        // TODO: print only where !isBorrowed
+        cout << " All books: " << endl;
+        for (auto i = booksById.begin(); i != booksById.end(); i++){
+            if (i->second.isBorrowed == false) {
+                cout << "Displaying available books: \n";
+                cout << "Key: "<< i->first << "       " << "id: "<< i->second.id << " Category: "<< i->second.category << " Borrow status:" << i->second.isBorrowed << "\n"<<endl;
+            }
+        }       
+    }
+
+    void displayBorrowedBooks() const {
+        // TODO: iterate borrowedIds and print those
+        cout << "Displaying borrowed books: \n" << endl;
+        for (auto i = booksById.begin(); i != booksById.end(); i++){
+            if (i->second.isBorrowed) {
+                cout << "Key: "<< i->first << "       " << "id: "<< i->second.id << " Category: "<< i->second.category << " Borrow status:" << i->second.isBorrowed << "\n"<<endl;
+            }
+        }     
+    }
+
+    // --- Stats ---
+    int countBooksInCategory(int category) const {
+        // TODO: return countPerCat[category]
+        return countPerCat[category];
+    }
+};
+
+// --- Main test driver (outline) ---
 int main() {
-    Library myLibrary;
-
+    Library myLibrary; //Initialise library.
+    
     // Adding books to the library (mirrors the starter main in the image)
     myLibrary.addBook(1, 3);   // Book ID: 1, Category: 3
     myLibrary.addBook(2, 7);   // Book ID: 2, Category: 7
@@ -78,8 +175,8 @@ int main() {
     myLibrary.addBook(5, 3);   // Book ID: 5, Category: 3  (Warning should trigger here)
     myLibrary.addBook(6, 0);   // Book ID: 6, Category: 0
 
-    cout << "\nAll books in the library (available first):\n";
-    cout << "Available books:\n";
+    cout<< "\nAll books in the library (available first):\n";
+    cout<< "Available books:\n";
     myLibrary.displayAvailableBooks();
 
     // Borrow a book by ID
