@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "cassert": "cpp",
+        "*.tpp": "cpp",
+        "iostream": "cpp",
+        "__split_buffer": "cpp",
+        "deque": "cpp"
+    }
+}
