@@ -32,6 +32,7 @@ public:
     void insert_kth(int pos, const Object& x);
     void delete_kth(int pos);
     void print_all() const;
+    void reverse();
 };
 
 #include "list.tpp"

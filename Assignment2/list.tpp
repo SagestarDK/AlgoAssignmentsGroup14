@@ -184,7 +184,14 @@ void List<Object>::print_all() const {
     cout << endl;
 }
 
-//template <typename Object>
-//void List<Object>::reverse() {
-    // TODO: swap next/prev for each node, swap head/tail
-//}
+template <typename Object>
+void List<Object>::reverse() {
+    Node* node = head; //Pointer to head of list(start).
+    while (node != nullptr){
+        swap(node->next,node->prev); //Swap memory addresses prev and next of each node thus reversing it
+        node = node->prev; //Go to next node, note order is now reversed so to go to next node, go prev.
+    }
+    Node* node2 = tail; //Pointer to head of list(start).
+    swap(node, node2); //Swap memory addresses head and tail, thus completing reversal of list.
+}
+
