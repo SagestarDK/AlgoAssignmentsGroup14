@@ -1,42 +1,78 @@
 #ifndef SET_ADT_H
 #define SET_ADT_H
 
-#include "List.h"   // reuse your linked list implementation from 2.1
+#include "list.h"  // your List ADT from Assignment 2.1
 
 // ===========================
-// Set ADT (built on List ADT)
+// Set ADT (using List ADT)
 // ===========================
+template <typename T>
 class Set {
 private:
-    List list;   // underlying storage for the Set
+    List<T> list;   // underlying storage
 
 public:
     // --- Constructors / Destructor ---
-    Set();   // TODO: initialize empty set
-    ~Set();  // TODO: clean up memory
+    Set() {
+        // TODO: initialize empty set
+    }
 
-    // --- Core Set operations ---
-    bool add(int x);
-    // TODO: check if x already exists in list; if not, insert at end
+    ~Set() {
+        // TODO: clean up memory if needed
+    }
 
-    bool remove(int x);
-    // TODO: find x in list, remove it if found, return success/fail
+    // --- Core operations ---
+    bool add(const T& x) {
+        // TODO: if not in list, insert; else ignore
+        if (list.contains(x)) {
+            cout<<"Element already exists in set, no duplicates allowed!"<<endl;
+            return false;
+        } else {
+            cout<<"Inserting element " << x << " in list"<<endl;
+            list.push_front(x);
+            return true;   
+        }
+    }
 
-    bool contains(int x) const;
-    // TODO: scan through list to see if x exists
+    bool remove(const T& x) {
+        if (list.contains(x)) {
+            cout<<"We have found: "<<x<< "in set, deleting it"<<endl;
+            list.delete_element(x);
+            return true;
+        }
+        else {
+            cout << "We havent found x in set" << endl;
+            return false;
+        }
+    }
 
-    int size() const;
-    // TODO: return number of elements (delegates to list.size())
+    bool contains(const T& x) const {
 
-    bool isEmpty() const;
-    // TODO: return true if list is empty
+        cout << "The set contains x" << endl;
+        return list.contains(x);
+    }
 
-    void clear();
-    // TODO: remove all elements from list
+    int size() const {
+        cout << "Size of set: " <<list.size()<<endl;
+        return list.size();
+    }
 
-    // --- Utility / Debug ---
-    void print() const;
-    // TODO: traverse list and print elements
+    bool isEmpty() const {
+        cout << "Set is now empty" << endl;
+        return list.empty();
+    }
+
+    void clear() {
+        // TODO: remove all elements
+        list.clear();
+        cout << "Clearing set!" << endl;
+    }
+
+    void print() const {
+        // TODO: traverse list and print
+        list.print_all();
+        cout << "prints set" << endl;
+    }
 };
 
 #endif // SET_ADT_H
