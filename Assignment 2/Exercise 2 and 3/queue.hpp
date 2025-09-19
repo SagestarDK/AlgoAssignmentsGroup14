@@ -3,36 +3,24 @@
 
 #include "stack.hpp"
 
-// Public methods you must implement:
-//
-// 1. enqueue(const Object& x)   // add element at the back (FIFO order)
-// 2. dequeue()                  // remove and return the front element
-// 3. front()                    // return the front element without removing
-// 4. empty()                    // check if queue is empty
-
 template <typename Object>
 class Queue {
 private:
-    Stack<Object> s1;   // first stack
-    Stack<Object> s2;   // second stack (if needed)
+    Stack<Object> s1;   //Stack
 
 public:
-    // TODO: constructor
+    //Constructor
     Queue();
 
-    // TODO: destructor
+    //Destructor
     ~Queue();
 
-    // TODO: enqueue
     void enqueue(const Object& x);
 
-    // TODO: dequeue
     Object dequeue();
 
-    // TODO: front
     Object front();
 
-    // TODO: empty
     bool empty();
 };
 
@@ -40,13 +28,13 @@ public:
 // Constructor
 template <typename Object>
 Queue<Object>::Queue() {
-    //Nothing to add here, s1 already has default constructor
+    //Nothing to add here, s1 already has default constructor implemented
 }
 
 // Destructor
 template <typename Object>
 Queue<Object>::~Queue() {
-    //Nothing to add here, s1 already has default destructor
+    //Nothing to add here, s1 already has default destructor implemented in stack.
 }
 
 // Enqueue
