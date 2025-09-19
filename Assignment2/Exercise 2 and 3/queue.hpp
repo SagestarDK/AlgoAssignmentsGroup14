@@ -6,21 +6,17 @@
 template <typename Object>
 class Queue {
 private:
-    Stack<Object> s1;   //Stack
+    Stack<Object> s1;   // Stack
 
 public:
-    //Constructor
+    // Constructor
     Queue();
-
-    //Destructor
+    // Destructor
     ~Queue();
 
     void enqueue(const Object& x);
-
     Object dequeue();
-
     Object front();
-
     bool empty();
 };
 
@@ -34,7 +30,7 @@ Queue<Object>::Queue() {
 // Destructor
 template <typename Object>
 Queue<Object>::~Queue() {
-    //Nothing to add here, s1 already has default destructor implemented in stack.
+    // Nothing to add here, s1 already has default destructor implemented in stack.
 }
 
 // Enqueue

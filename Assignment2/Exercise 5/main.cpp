@@ -5,7 +5,6 @@ using namespace std;
 int main() {
     Set<int> s;
 
-    // TODO: test all functions
     cout << "Is empty? " << s.isEmpty() << endl;
 
     s.add(5);
