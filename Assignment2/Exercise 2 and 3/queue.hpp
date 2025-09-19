@@ -6,17 +6,21 @@
 template <typename Object>
 class Queue {
 private:
-    Stack<Object> s1;   // Stack
+    Stack<Object> s1;   //Stack
 
 public:
-    // Constructor
+    //Constructor
     Queue();
-    // Destructor
+
+    //Destructor
     ~Queue();
 
     void enqueue(const Object& x);
+
     Object dequeue();
+
     Object front();
+
     bool empty();
 };
 
@@ -30,17 +34,18 @@ Queue<Object>::Queue() {
 // Destructor
 template <typename Object>
 Queue<Object>::~Queue() {
-    // Nothing to add here, s1 already has default destructor implemented in stack.
+    //Nothing to add here, s1 already has default destructor implemented in stack.
 }
 
-// Enqueue
+// Enqueue, push element onto queue. Here we use stack.push.
 template <typename Object>
 void Queue<Object>::enqueue(const Object& x) {
     s1.push(x); //push value onto stack
     cout<<"Element pushed into queue!"<<endl;
 }
 
-//Dequeue
+//Dequeue, here with use a recursive method to pop all elements on stack until we reach bottom element, which we pop and save as front element
+//Then we recursively restore rest of the queue and return frontelement last.
 template <typename Object>
 Object Queue<Object>::dequeue() {
     if (s1.isEmpty()) {
@@ -65,7 +70,7 @@ Object Queue<Object>::dequeue() {
 }
 
 
-// Front (recursive, single stack)
+// Front (recursive, single stack), do the same as dequeue expect here we do not pop the top element we return, we restore everything.
 template <typename Object>
 Object Queue<Object>::front() {
     if (s1.empty()) {
@@ -92,7 +97,7 @@ Object Queue<Object>::front() {
 }
 
 
-// Empty
+// Empty, use stack isEmpty function to return if empty.
 template <typename Object>
 bool Queue<Object>::empty() {
     return s1.isEmpty();
