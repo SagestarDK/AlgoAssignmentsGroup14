@@ -1,43 +1,30 @@
-// ============================================================================
-// Recursion – Minimal Skeleton (no solutions inside)
-// Problems:
-//   (a) Recursively search for x in array A -> return true/false.
-//   (b) Recursively find BOTH minimum and maximum in A.
-// Approach: Straightforward LINEAR recursion (easiest & quickest).
-//
-// Fill in the TODOs only. Keep core logic recursive (no loops inside them).
-//
-// Complexity notes to write in your report (complete the sentences):
-//   • contains_recursive: Time = Θ(N) worst-case (T(n)=T(n-1)+Θ(1)), 
-//                         Space = Θ(N) due to recursion depth.
-//   • minmax_recursive:  Time = Θ(N) (T(n)=T(n-1)+Θ(1)),
-//                        Space = Θ(N) due to recursion depth.
-// ============================================================================
-
+#include <iostream>
 #include <vector>
 #include <stdexcept>
 #include <limits>
+#include <cassert>
 #include <utility>  // std::pair
 #include <cstddef>  // std::size_t
+using namespace std; 
 
-// -------------------- API you will implement --------------------
 
 // (a) Search: public entry. Calls a private index-based helper.
 template <typename T>
 bool contains_recursive(const std::vector<T>& A, const T& x);
+    
 
 // (b) Min & Max: public entry. Calls a private accumulator-style helper.
-// Pre: A.size() > 0 (decide: throw or handle explicitly)
 template <typename T>
 std::pair<T,T> minmax_recursive(const std::vector<T>& A);
 
-// -------------------- Private helpers (implement below) --------------------
+// -------------------- Private helpers ADT --------------------
 namespace detail {
 
 // contains_recursive helper: examine A[idx], recurse on the rest.
 // Base case idea: idx == A.size() -> not found.
 template <typename T>
 bool contains_helper(const std::vector<T>& A, std::size_t idx, const T& x);
+
 
 // minmax_recursive helper: carry current (min, max) while advancing idx.
 // Base case idea: idx == A.size() -> return accumulated (min,max).
@@ -47,39 +34,51 @@ std::pair<T,T> minmax_helper(const std::vector<T>& A,
                              T current_min,
                              T current_max);
 
-} // namespace detail
+} 
 
-// =========================== STUBS (fill TODOs) =============================
+// ================== IMPLEMENTATION ==================
+
+// ================ Task A =================
 
 // (a) Search entry
 template <typename T>
 bool contains_recursive(const std::vector<T>& A, const T& x) {
-    // TODO: Optionally handle empty vector quickly (return false).
-    // TODO: Delegate to helper starting at index 0.
-    (void)A; (void)x;               // remove after implementing
-    return false;                   // placeholder
+    if (A.empty()) {
+        cout << "A is empty, so element isnt there." << endl;
+        return false;
+    } 
+    return detail::contains_helper(A, 0, x);
 }
 
 // (a) Search helper
 template <typename T>
 bool detail::contains_helper(const std::vector<T>& A, std::size_t idx, const T& x) {
-    // TODO: Base case: if idx == A.size() -> return false.
-    // TODO: Recursive case:
-    //   - Check current element
-    //   - If match -> return true
-    //   - Else -> return contains_helper(A, idx+1, x)
-    (void)A; (void)idx; (void)x;    // remove after implementing
-    return false;                   // placeholder
+    //Base case: We are at the end of the array/vector and if we happen to be here, 
+    // then we havent found element x and return false.
+    //Otherwise, we turn true if we find x or 
+    if (idx == A.size()){
+        std::cout << "We searched whole A, couldn't find x element." << endl;
+        return false;
+    }
+    else if (A[idx]== x) {
+        std::cout << "We searched vector A and found: " << x << ", at position: " << idx << endl;
+        return true; 
+    } 
+    else {
+        return contains_helper(A, idx+1, x);
+    }
 }
+
+// ================ Task B =================
 
 // (b) Min+Max entry
 template <typename T>
 std::pair<T,T> minmax_recursive(const std::vector<T>& A) {
-    // TODO: If A is empty -> decide policy (throw std::invalid_argument or similar).
-    // TODO: Initialize current_min/current_max with A[0].
-    // TODO: Call helper starting at idx = 1.
-    (void)A;                        // remove after implementing
-    return {T{}, T{}};              // placeholder
+    if(A.empty()){
+        throw std::invalid_argument("minmax_recurse: empty vector");
+    } else {
+        return detail::minmax_helper(A, 0, A[0], A[0]);
+    }
 }
 
 // (b) Min+Max helper
@@ -88,26 +87,31 @@ std::pair<T,T> detail::minmax_helper(const std::vector<T>& A,
                                      std::size_t idx,
                                      T current_min,
                                      T current_max) {
-    // TODO: Base case: if idx == A.size() -> return {current_min, current_max}.
-    // TODO: Recursive case:
-    //   - Update current_min/current_max using A[idx]
-    //   - Recurse on idx+1 with updated accumulators
-    (void)A; (void)idx; (void)current_min; (void)current_max; // remove after implementing
-    return {T{}, T{}};               // placeholder
+    // BC: If we reach end of the vector, return final min and max.
+    // Recursive case: If the current element in the array is higher than current max or lower than current min
+    // Update the currentmin or currentmax if that is the case.
+    if (idx == A.size()){
+        std::cout<<"Min: "<<current_min<<endl;
+        std::cout<<"Max: "<<current_max<<endl;
+        return {current_min, current_max};
+    }
+    else if (A[idx] < current_min){ 
+        current_min = A[idx];
+    }
+    else if (A[idx] > current_max){
+        current_max = A[idx];
+    }
+    return minmax_helper(A, idx + 1, current_min, current_max);
 }
 
-// ============================== OPTIONAL TESTS ==============================
-// Add your own tests or a main() that calls the functions with small vectors.
-// Keep loops OUT of the recursive core functions, but feel free to use loops
-// here to generate input cases if you want.
-// ============================================================================
 
 int main() {
-    // TODO: add a few quick checks when you’ve implemented:
-    // std::vector<int> v{3,1,4,1,5,9};
-    // assert( contains_recursive(v, 4) == true );
-    // assert( contains_recursive(v, 2) == false );
-    // auto [mn,mx] = minmax_recursive(v);
-    // assert(mn == 1 && mx == 9);
+    std::vector<int> v{3,1,4,1,5,9};
+    assert(contains_recursive(v, 4) == true );
+    assert(contains_recursive(v, 2) == false );
+
+    auto [mn,mx] = minmax_recursive(v);
+    assert(mn == 1 && mx == 9);
+
     return 0;
 }

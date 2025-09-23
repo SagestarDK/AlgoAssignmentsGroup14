@@ -49,48 +49,20 @@ inline bool inBounds(int r, int c, int rows, int cols);
 } // namespace maze
 
 
-// ============================ STUBS (fill TODOs) ============================
 namespace maze {
 
 bool hasPath(const std::vector<std::string>& input) {
-    // TODO:
-    // 1) Validate non-empty rectangular grid.
-    // 2) Choose coordinate system: convert (1,1) to 0-based (0,0) if needed.
-    // 3) Make a modifiable copy if you will mark visited in-place:
-    //      auto grid = input;
-    //    OR prepare a visited matrix:
-    //      std::vector<std::vector<bool>> vis(rows, std::vector<bool>(cols,false));
-    // 4) Call dfs(start_r, start_c, ...).
-    (void)input; // remove after implementing
-    return false; // placeholder
+    
 }
 
 bool dfs(int r, int c,
          std::vector<std::string>& grid,
          int rows, int cols) {
-    // TODO: Base cases in this order (typical):
-    //   a) if out of bounds -> return false
-    //   b) if grid[r][c] is 'X' (wall) -> return false
-    //   c) if grid[r][c] is already visited mark -> return false
-    //   d) if grid[r][c] is 'E' -> return true
-    //
-    // TODO: Mark current as visited (choose a char like '.').
-    //
-    // TODO: Try 4 directions (no loops required; just 4 recursive calls):
-    //   if (dfs(r-1, c, ...)) return true;   // up
-    //   if (dfs(r, c+1, ...)) return true;   // right
-    //   if (dfs(r+1, c, ...)) return true;   // down
-    //   if (dfs(r, c-1, ...)) return true;   // left
-    //
-    // TODO: (Optional) Unmark before returning false if you want to preserve grid.
-    (void)r; (void)c; (void)grid; (void)rows; (void)cols; // remove after implementing
-    return false; // placeholder
+
 }
 
 inline bool inBounds(int r, int c, int rows, int cols) {
-    // TODO: return true iff 0 <= r < rows and 0 <= c < cols.
-    (void)r; (void)c; (void)rows; (void)cols; // remove after implementing
-    return false; // placeholder
+
 }
 
 } // namespace maze
