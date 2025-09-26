@@ -28,5 +28,5 @@ void triangle(int m, int n) {
 }
 
 int main() {
-    triangle(3, 5);
+    triangle(5, 10);
 }
