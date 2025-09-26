@@ -226,10 +226,10 @@ int List<Object>::search(const Object& x) const {
 // Exercise5.cpp assignment 3
 template <typename Object>
 int List<Object>::search_from(Node* node, const Object& x, int index) const {
-    // error code if index not found
+    // Base case error code if index not found
     if (node == tail) return -1; 
-    // if index is found at position                 
+    // Base case if index is found at position                 
     if (node->data == x) return index;
-    // keep searching for index
+    // Recursive function keep searching for index
     return search_from(node->next, x, index + 1); 
 }
