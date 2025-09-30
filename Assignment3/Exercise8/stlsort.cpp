@@ -1,15 +1,12 @@
-// bench_simple.cpp
 #include <algorithm>
 #include <iostream>
-#include "intro_sort.h"
-#include <random>
 #include <vector>
 #include <chrono>
 using namespace std::chrono;
-
+using namespace std;
 
 int main() {
-    vector<int> v(1100);
+   vector<int> v(1000);
 
     // Generate Random values
     auto f = []() -> int { return rand() % 100; };
@@ -21,8 +18,8 @@ int main() {
     auto start = high_resolution_clock::now();
 
     // Call the function, here sort()
-    introSort(v);
-
+    sort(v.begin(), v.end());
+    
     // Get ending timepoint
     auto stop = high_resolution_clock::now();
 
