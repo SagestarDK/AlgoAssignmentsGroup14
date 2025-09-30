@@ -1,7 +1,7 @@
 // exercise7.cpp
 #include <iostream>
 #include <vector>
-#include <algorithm> // for std::max if needed
+#include <algorithm> 
 using namespace std;
 
 // TODO: implement countingSort function
@@ -38,19 +38,36 @@ void countingSort(std::vector<int> &a) {
     a = std::move(output);
 }
 
-//  - find the maximum value (k) in the array
-//  - create a count array of size k+1
-//  - count how many times each number appears
-//  - rebuild the sorted array from the counts
-
 int main() {
-    // TODO: create test vectors with integers in range [0..k]
+    // Test 1: empty
+    std::vector<int> t1;
+    std::cout << "=== empty ===\nbefore: [";
+    for (size_t i=0;i<t1.size();++i) std::cout<<t1[i]<<(i+1<t1.size()? ", ":"");
+    std::cout << "]\n";
+    countingSort(t1);
+    std::cout << "after : [";
+    for (size_t i=0;i<t1.size();++i) std::cout<<t1[i]<<(i+1<t1.size()? ", ":"");
+    std::cout << "]\n\n";
 
-    // TODO: print vector before sorting
+    // Test 2: small range with duplicates (k<=3)
+    std::vector<int> t2 = {0,1,0,2,1,2,2,0,3,3,1};
+    std::cout << "=== small range, duplicates (k<=3) ===\nbefore: [";
+    for (size_t i=0;i<t2.size();++i) std::cout<<t2[i]<<(i+1<t2.size()? ", ":"");
+    std::cout << "]\n";
+    countingSort(t2);
+    std::cout << "after : [";
+    for (size_t i=0;i<t2.size();++i) std::cout<<t2[i]<<(i+1<t2.size()? ", ":"");
+    std::cout << "]\n\n";
 
-    // TODO: call countingSort on the vector
+    // Test 3: wide range (k=1000)
+    std::vector<int> t3 = {1000,0,999,1,500,500,2,3,3,10,999,1000,42,17,17,0,1,2,3,4};
+    std::cout << "=== wide range (k=1000) ===\nbefore: [";
+    for (size_t i=0;i<t3.size();++i) std::cout<<t3[i]<<(i+1<t3.size()? ", ":"");
+    std::cout << "]\n";
+    countingSort(t3);
+    std::cout << "after : [";
+    for (size_t i=0;i<t3.size();++i) std::cout<<t3[i]<<(i+1<t3.size()? ", ":"");
+    std::cout << "]\n\n";
 
-    // TODO: print vector after sorting
-
-    // TODO: add more test cases with different ranges of k
+    return 0;
 }
