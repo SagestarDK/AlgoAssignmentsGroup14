@@ -6,7 +6,7 @@
 #include "insertion_sort.h"  // iterator-based overload: insertionSort(begin,end)
 #include "quick_sort.h"      // partition(...)
 
-static constexpr int kInsertionCutoff = 1024;
+static constexpr int kInsertionCutoff = 16;
 
 template <typename Comparable>
 void introSort(std::vector<Comparable>& a, int left, int right) {
