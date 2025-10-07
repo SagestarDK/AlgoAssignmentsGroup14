@@ -1,36 +1,50 @@
-#ifndef _INTRO_SORT_H_
-#define _INTRO_SORT_H_
-
+#ifndef _INSERTION_SORT_H_
+#define _INSERTION_SORT_H_
 #include <vector>
-#include <cassert>
-#include "insertion_sort.h"  // has iterator overload
-#include "quick_sort.h"      // provides partition(a,left,right)
+#include <functional>
 
-using std::vector;
+using namespace std;
 
-static constexpr int useInsertion = 16;
+/**
+ * Simple insertion sort.
+ */
+template <typename Comparable>
+void insertionSort(vector<Comparable> &a) {
+	for (int p = 1; p < a.size(); ++p) {
+		Comparable tmp = std::move(a[p]);
 
-template <typename T>
-void introSort(vector<T>& a, int left, int right) {
-    if (left >= right) return;                          // base case
-    assert(left >= 0 && right < static_cast<int>(a.size()));
-
-    const int size = right - left + 1;
-    if (size <= useInsertion) {
-        // sort subarray [left, right] via iterator overload
-        insertionSort(a.begin() + left, a.begin() + right + 1);
-        return;
-    }
-
-    // partition and sort both halves (two separate ifs, NOT else-if)
-    int pivot = partition(a, left, right);
-    if (pivot - 1 > left)  introSort(a, left,     pivot - 1);
-    if (pivot + 1 < right) introSort(a, pivot + 1, right);
+		int j;
+		for (j = p; j > 0 && tmp < a[j - 1]; --j) {
+			a[j] = std::move(a[j - 1]);
+		}
+		a[j] = std::move(tmp);
+	}
 }
 
-template <typename T>
-void introSort(vector<T>& a) {
-    if (!a.empty()) introSort(a, 0, static_cast<int>(a.size()) - 1);
+/*
+ * This is the more public version of insertion sort.
+ * It requires a pair of iterators and a comparison
+ * function object.
+ */
+template <typename Iterator, typename Comparator>
+void insertionSort(const Iterator& begin, const Iterator& end, Comparator less){
+	if (begin == end)
+		return;
+
+	for (Iterator j, p = begin + 1; p != end; ++p) {
+		auto tmp = std::move(*p);
+		for (j = p; j != begin && less(tmp, *(j - 1)); --j)
+			*j = std::move(*(j - 1));
+		*j = std::move(tmp);
+	}
+}
+
+/*
+ * The two-parameter version calls the three parameter version, using C++11.
+ */
+template <typename Iterator >
+void insertionSort(const Iterator& begin, const Iterator& end) {
+	insertionSort(begin, end, less<decltype(*begin)> { });
 }
 
 #endif
